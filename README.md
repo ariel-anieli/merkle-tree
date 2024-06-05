@@ -3,12 +3,8 @@
 ## Usage
 ```erlang
 1> c(merkle_computer).
-merkle_computer.erl:2:2: Warning: undefined callback function handle_cast/2 (behaviour 'gen_server')
-%    2| -behaviour(gen_server).
-%     |  ^
-
-merkle_computer.erl:64:27: Warning: variable 'Arg' shadowed in 'fun'
-%   64|     lists:foldl(fun(Func, Arg) -> Func(Arg) end, Arg, Funcs).
+merkle_computer.erl:19:27: Warning: variable 'Arg' shadowed in 'fun'
+%   19|     lists:foldl(fun(Func, Arg) -> Func(Arg) end, Arg, Funcs).
 %     |                           ^
 
 {ok,merkle_computer}
@@ -16,7 +12,7 @@ merkle_computer.erl:64:27: Warning: variable 'Arg' shadowed in 'fun'
 #{file => "input.txt",
   root =>
       "afd5c12556531f079b7fd00d8cb9afdf20b5c9d30bc06b055323f61d20ad1447",
-  duration_ms => 284}
+  duration_ms => 113}
 ```
 
 ## Build machine
