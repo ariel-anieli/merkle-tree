@@ -15,7 +15,6 @@ compute_root(File) ->
     {ok, Data}   = file:read_file(File),
     Leaves = binary:split(Data, [<<"\n">>], [global]),
     Root   = compute_root(Worker, Leaves),
-    stop(Worker),
     Duration = erlang:system_time(millisecond) - Start,
 
     #{file=> File, root=>Root, duration_ms=>Duration}.
@@ -24,8 +23,6 @@ compute_root(File) ->
 
 start() ->
     gen_server:start(?MODULE, [], []).
-stop(Worker) ->
-    gen_server:call(Worker, stop).
 
 compute_root(Worker, Leaves) ->
     gen_server:call(Worker, {compute_root, Leaves}).
@@ -35,13 +32,13 @@ compute_root(Worker, Leaves) ->
 init([]) ->
     {ok, []}.
 
-handle_call({compute_root,[Head,Tail]}, _From, State) ->
-    {reply, hash(Head, Tail), State};
+handle_call({compute_root,[Head,Tail]}, From, State) ->
+    {stop, normal, hash(Head, Tail), State};
 
-handle_call({compute_root,[Head,Mid,Tail]}, _From, State) ->
-    {reply, hash(hash(Head, Mid), Tail), State};
+handle_call({compute_root,[Head,Mid,Tail]}, From, State) ->
+    {stop, normal, hash(hash(Head, Mid), Tail), State};
 
-handle_call({compute_root,Leaves}, _From, State) when length(Leaves)>3 ->
+handle_call({compute_root,Leaves}, From, State) when length(Leaves)>3 ->
     Middle = length(Leaves) div 2,
     {Head, Tail} = lists:split(Middle, Leaves),
 
@@ -50,13 +47,7 @@ handle_call({compute_root,Leaves}, _From, State) when length(Leaves)>3 ->
 
     Hash = hash(compute_root(HeadWorker, Head), compute_root(TailWorker, Tail)),
 
-    stop(HeadWorker),
-    stop(TailWorker),
-
-    {reply, Hash, State};
-
-handle_call(stop, _From, State) ->
-    {stop, normal, stopped, State}.
+    {stop, normal, Hash, State}.
 
 % Utilities
 

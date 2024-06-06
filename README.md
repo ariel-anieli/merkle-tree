@@ -1,4 +1,4 @@
-# Merkle tree assigment
+# Merkle tree
 
 ## Usage
 ```erlang
@@ -16,7 +16,7 @@ merkle_computer.erl:64:27: Warning: variable 'Arg' shadowed in 'fun'
 #{file => "input.txt",
   root =>
       "afd5c12556531f079b7fd00d8cb9afdf20b5c9d30bc06b055323f61d20ad1447",
-  duration_ms => 284}
+  duration_ms => 212}
 ```
 
 ## Build machine
